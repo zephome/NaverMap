@@ -1,0 +1,86 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>네이버맵 샘플 코드</title>
+
+	<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+	<!--
+		key 발급은 http://developer.naver.com/wiki/pages/OpenAPI > 키 발급/관리 이용
+		key 발급 시 허용할 URL을 입력하기때문에 반드시 key 발급 (아래 key는 localhost:10003만 사용할 수 있음)
+	-->
+	<script type="text/javascript" src="http://openapi.map.naver.com/openapi/naverMap.naver?ver=2.0&key=0c84760cf9409b4cbd798e72bcaa0260"></script>
+
+	<script type="text/javascript">
+		$(window).load(function () {
+			// 지도에 표시할 좌표
+			// 좌표 알아내기
+			// 1. http://map.naver.com/
+			// 2. 검색
+			// 3. 위치가 지도에 표시되면 마커 클릭
+			// 4. 상세정보 창이 나오면 보내기 버튼 클릭
+			// 5. URL 복사 클릭
+			// 6. 주소에서 Lat(x), Lng(y)의 값을 입력 (var oCenterPoint = new nhn.api.map.LatLng(Lat, Lng);)
+			var oCenterPoint = new nhn.api.map.LatLng(37.5119859, 127.0718389);
+			nhn.api.map.setDefaultPoint('LatLng');		// LatLng, TM128, UTMK 중 하나 선택
+			oMap = new nhn.api.map.Map('map_area', {	// 지도를 표시할 영역의 ID 입력
+				point: oCenterPoint,		// 지도 중심점의 좌표
+				zoom: 10,					// 지도의 축척 레벨
+				enableWheelZoom: true,		// 마우스 휠 동작으로 지도를 확대/축소할지 여부
+				enableDragPan: true,		// 마우스로 끌어서 지도를 이동할지 여부
+				enableDblClickZoom: true,	// 더블클릭으로 지도를 확대할지 여부
+				mapMode: 0,					// 지도 모드(0 : 일반 지도, 1 : 겹침 지도, 2 : 위성 지도)
+				activateTrafficMap: true,	// 실시간 교통 활성화 여부
+				activateBicycleMap: true,	// 자전거 지도 활성화 여부
+				minMaxLevel: [1, 14],		// 지도의 최소/최대 축척 레벨
+			});
+
+			// 줌 컨트롤
+			var mapZoom = new nhn.api.map.ZoomControl();
+			mapZoom.setPosition({ left: 10, bottom: 10 }); // - 줌 컨트롤 위치 지정
+			oMap.addControl(mapZoom);
+
+			// 마커 이미지 정보
+			var oSize = new nhn.api.map.Size(28, 37);
+			var oOffset = new nhn.api.map.Size(14, 37);
+			var oIcon = new nhn.api.map.Icon('http://static.naver.com/maps2/icons/pin_spot2.png', oSize, oOffset);
+
+			// 마커 표시
+			var oMarker = new nhn.api.map.Marker(oIcon, { title: "잠실 야구장", point: oCenterPoint });
+			oMap.addOverlay(oMarker);
+
+			// 마우스오버/아웃일때 마커 표시
+			oMap.attach('mouseenter', function (oCustomEvent) {
+				var oTarget = oCustomEvent.target;
+
+				if (oTarget instanceof nhn.api.map.Marker) {
+					var oMarker = oTarget;
+					oLabel.setVisible(true, oMarker);
+				}
+			});
+
+			oMap.attach('mouseleave', function (oCustomEvent) {
+				var oTarget = oCustomEvent.target;
+
+				if (oTarget instanceof nhn.api.map.Marker) {
+					var oMarker = oTarget;
+					oLabel.setVisible(false, oMarker);
+				}
+			});
+
+			// 마커 라벨
+			var oLabel = new nhn.api.map.MarkerLabel();
+			oMap.addOverlay(oLabel);
+			oLabel.setPosition(true, 10, 0);
+		});
+	</script>
+
+
+</head>
+<body>
+	<!-- str :: map display -->
+	<div id="map_area" style="width:500px;height:500px;"></div>
+	<!-- end :: map display -->
+</body>
+</html>
