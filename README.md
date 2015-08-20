@@ -2,7 +2,7 @@
 
 ## 키 발급 방법
 - URL: http://developer.naver.com/wiki/pages/OpenAPI
-- key 발급 시 허용할 URL을 입력하기때문에 key는 반드시 발급받아야 함 (아래 key는 localhost:10003만 사용할 수 있음)
+- key 발급 시 허용할 URL을 입력하기때문에 key는 반드시 발급받아야 함
 - `<script type="text/javascript" src="http://openapi.map.naver.com/openapi/naverMap.naver?ver=2.0&key=키입력"></script>`
 
 ## 주소를 좌표로 변환
